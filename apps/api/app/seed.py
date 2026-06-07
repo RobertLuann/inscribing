@@ -1,6 +1,6 @@
-from db.database import engine, init_db
-from models.faq import FAQItem
-from services.nlp_service import nlp_service
+from app.db.database import engine, init_db
+from app.models.faq import FAQItem
+from app.services.nlp_service import nlp_service
 from sqlmodel import Session, select
 
 
