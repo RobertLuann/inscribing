@@ -1,8 +1,13 @@
 import uvicorn
 from fastapi import FastAPI
+from fastapi.requests import Request
+from fastapi.responses import JSONResponse
 
 from app.db.database import init_db
+from app.routes import auth_routes as auth
+from app.routes import block_routes as block
 from app.routes import chat_routes as chat
+from app.routes import collection_routes as collection
 from app.services.nlp_service import nlp_service
 
 app = FastAPI(
@@ -10,13 +15,22 @@ app = FastAPI(
     description="Backend para o Inscribing com busca semântica em pgvector",
 )
 
+
+# Exception handler global para regras de negócio
+@app.exception_handler(ValueError)
+def value_error_handler(_request: Request, exc: ValueError):
+    return JSONResponse(status_code=400, content={"detail": str(exc)})
+
+
 # Registra as rotas
 app.include_router(chat.router)
+app.include_router(auth.router)
+app.include_router(collection.router)
+app.include_router(block.router)
 
 
 @app.on_event("startup")
 def on_startup():
-    # Inicializa banco e carrega o modelo na memória ao ligar a API
     init_db()
     nlp_service.load_model()
 

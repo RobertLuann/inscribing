@@ -31,4 +31,5 @@ class ReorderItem(BaseModel):
 
 
 class ReorderRequest(BaseModel):
+    collection_id: int
     items: list[ReorderItem]
