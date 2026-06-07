@@ -45,7 +45,7 @@ htmlcov/
 # Caso você salve os vetores do FAISS ou baixe modelos pesados em pastas locais
 *.index
 *.faiss
-models/
+
 
 # =========================
 # Frontend (apps/web - Next.js/Bun)
