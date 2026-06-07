@@ -9,9 +9,14 @@
 - **Idiomas:** Escreva código e nome de variáveis em **Inglês** (ex: `get_faq`, `FAQItem`). Comentários e documentações devem estar em **Português**.
 - **Namespace Packages:** **NÃO** crie arquivos `__init__.py` dentro da pasta `app/` do backend. O projeto utiliza importações implícitas do Python 3.3+.
 - **Performance Assíncrona (Async First):** 
-  - Rotas FastAPI devem usar `async def`. 
+  - Rotas FastAPI devem usar `async def`.
   - Serviços pesados (modelos ML do spaCy e SentenceTransformers) devem ser implementados como **Singletons** e carregados apenas uma vez durante o ciclo de vida (Lifespan) da aplicação.
-- **Dependency Injection:** Utilize o padrão do FastAPI (ex: `Depends(get_session)`) para injetar conexões de banco e instâncias de serviços nas rotas.
+- **Dependency Injection:** Utilize o padrão do FastAPI (ex: `Depends(get_session)`, `Depends(get_current_user)`) para injetar conexões de banco e instâncias de serviços nas rotas.
+- **Auth Guard:** Rotas protegidas usam `user: User = Depends(get_current_user)` que extrai o token JWT do header `Authorization: Bearer <token>`.
+- **Tratamento de Erros:** Services lançam `ValueError` para regras de negócio. O `main.py` possui um exception handler global que converte `ValueError` → `400 Bad Request` com `{"detail": mensagem}`.
+- **PKs Opcionais do SQLModel:** SQLModel tipa chaves primárias como `Optional[int]`. Após `commit()` + `refresh()`, o valor é garantido. Use `cast(int, obj.id)` em vez de `# type: ignore` para resolver a tipagem.
+- **Type Ignores Específicos:** Quando inevitável (bibliotecas sem stubs), use o código de erro específico: `# type: ignore[attr-defined]` para métodos desconhecidos (ex: `l2_distance` do pgvector) e `# type: ignore[arg-type]` para tipo de argumento (ex: `Block.ordem` em `order_by`).
+- **Config por Env Vars:** Parâmetros sensíveis e configuráveis devem ser lidos via `os.getenv()` com fallback: `JWT_SECRET`, `JWT_ALGORITHM`, `JWT_EXPIRATION`, `CHAT_THRESHOLD`.
 
 ## Frontend (TypeScript / Next.js)
 
