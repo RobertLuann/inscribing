@@ -22,6 +22,9 @@
 | psycopg2-binary | 2.9.12 | Driver PostgreSQL |
 | Uvicorn | 0.48.0 | Servidor ASGI |
 | uv (Astral) | — | Gerenciador de dependências e ambientes virtuais |
+| bcrypt | 5.0.0 | Hash e verificação de senhas |
+| python-jose | 3.5.0 | Geração e validação de tokens JWT |
+| cryptography | 48.0.0 | Algoritmos criptográficos (dependência do python-jose) |
 
 ## Inteligência Artificial (NLP e Busca Semântica)
 

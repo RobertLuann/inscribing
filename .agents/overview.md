@@ -27,5 +27,5 @@ Plataforma web de anotações e gestão de tarefas inspirada no modelo de blocos
 
 ## Estado Atual do Repositório
 
-- **Backend:** Possui um endpoint de chat funcional (`/api/chat`), integração com `SentenceTransformers` e `pgvector`, mas está **faltando a model `FAQItem`** (`app/models/faq.py`), o que impede o seed do banco.
-- **Frontend:** Encontra-se no scaffold inicial do Next.js (template padrão). A interface do editor BlockNote e do chat ainda não foram implementadas.
+- **Backend:** Completo. 15 endpoints REST, autenticação JWT (registro, login, sessão), gestão de coleções e blocos (CRUD + duplicação + reordenação), pipeline NLP spaCy (tokenização, lematização, stop words) + SentenceTransformers, busca semântica com pgvector e threshold configurável via env var. Seed do FAQ funcional.
+- **Frontend:** Encontra-se no scaffold inicial do Next.js (template padrão). A interface do editor BlockNote, chat, autenticação e FAQ ainda não foram implementadas.
