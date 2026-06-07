@@ -24,6 +24,7 @@ def value_error_handler(_request: Request, exc: ValueError):
 
 # Registra as rotas
 app.include_router(chat.router)
+app.include_router(chat.faq_router)
 app.include_router(auth.router)
 app.include_router(collection.router)
 app.include_router(block.router)
