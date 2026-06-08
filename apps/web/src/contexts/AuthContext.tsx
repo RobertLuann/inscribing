@@ -14,6 +14,7 @@ import type {
   AuthResponse,
   LoginRequest,
   RegisterRequest,
+  UpdateProfileRequest,
   User,
 } from "@/types/auth";
 
@@ -23,6 +24,7 @@ interface AuthContextType {
   isLoading: boolean;
   login: (data: LoginRequest) => Promise<void>;
   register: (data: RegisterRequest) => Promise<void>;
+  updateProfile: (data: UpdateProfileRequest) => Promise<void>;
   logout: () => void;
 }
 
@@ -86,6 +88,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     [persistSession],
   );
 
+  const updateProfile = useCallback(async (data: UpdateProfileRequest) => {
+    const updated = await api.put<User>("/auth/me", data);
+    localStorage.setItem(LS_USER_KEY, JSON.stringify(updated));
+    setUser(updated);
+  }, []);
+
   const logout = useCallback(() => {
     localStorage.removeItem(LS_AUTH_KEY);
     localStorage.removeItem(LS_USER_KEY);
@@ -95,7 +103,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, token, isLoading, login, register, logout }}
+      value={{
+        user,
+        token,
+        isLoading,
+        login,
+        register,
+        updateProfile,
+        logout,
+      }}
     >
       {children}
     </AuthContext.Provider>

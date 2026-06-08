@@ -25,3 +25,7 @@ export interface RegisterRequest {
   password: string;
   confirm_password: string;
 }
+
+export interface UpdateProfileRequest {
+  nome: string;
+}
