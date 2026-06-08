@@ -1,6 +1,6 @@
 "use client";
 
-import { MessageSquare } from "lucide-react";
+import { MessageCircleQuestion } from "lucide-react";
 
 interface ChatFABProps {
   onClick: () => void;
@@ -11,9 +11,10 @@ export function ChatFAB({ onClick }: ChatFABProps) {
     <button
       type="button"
       onClick={onClick}
-      className="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-white shadow-lg hover:bg-primary/90 active:bg-primary/80 transition-all"
+      aria-label="Abrir chat de suporte"
+      className="fixed bottom-6 right-6 z-40 flex h-12 w-12 items-center justify-center rounded-full border border-border bg-background text-foreground shadow-sm transition-colors hover:bg-card"
     >
-      <MessageSquare size={24} />
+      <MessageCircleQuestion size={22} />
     </button>
   );
 }
