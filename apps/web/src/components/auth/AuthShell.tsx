@@ -27,7 +27,7 @@ interface AuthShellProps {
 // "Livro" centralizado dividido em duas metades por uma linha vertical.
 export function AuthShell({ children, formSide }: AuthShellProps) {
   const form = (
-    <div className="flex items-center justify-center px-10 py-12">
+    <div className="flex h-full items-center justify-center px-10 py-12">
       <div className="w-full max-w-sm">{children}</div>
     </div>
   );
