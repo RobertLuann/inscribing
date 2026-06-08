@@ -104,6 +104,23 @@ Retorna os dados do usuário autenticado.
 
 ---
 
+### `PUT /api/auth/me`
+
+Atualiza o nome do usuário autenticado.
+
+**Headers:** `Authorization: Bearer <token>`
+
+**Request:**
+```json
+{ "nome": "Novo Nome" }
+```
+
+**Response `200`:** `UserResponse` (com o `nome` atualizado).
+
+**Erros:** `400` — nome vazio.
+
+---
+
 ## Coleções
 
 Todas as rotas exigem `Authorization: Bearer <token>`.
