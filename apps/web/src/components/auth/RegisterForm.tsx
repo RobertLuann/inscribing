@@ -10,7 +10,6 @@ import { useAuth } from "@/contexts/AuthContext";
 
 const registerSchema = z
   .object({
-    name: z.string().min(1, "Nome obrigatório"),
     email: z.string().email("E-mail inválido"),
     password: z
       .string()
@@ -42,8 +41,10 @@ export function RegisterForm() {
   async function onSubmit(data: RegisterFormData) {
     setError(null);
     try {
+      // O design não expõe campo de nome; derivamos do e-mail (o backend exige nome).
+      const nome = data.email.split("@")[0];
       await authRegister({
-        nome: data.name,
+        nome,
         email: data.email,
         password: data.password,
         confirm_password: data.confirmPassword,
@@ -59,13 +60,6 @@ export function RegisterForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
-      <Input
-        label="Nome"
-        placeholder="Seu nome"
-        error={errors.name?.message}
-        {...register("name")}
-      />
-
       <Input
         label="E-mail"
         type="email"
@@ -83,12 +77,19 @@ export function RegisterForm() {
       />
 
       <Input
-        label="Confirmar Senha"
+        label="Confirmar senha"
         type="password"
         placeholder="******"
         error={errors.confirmPassword?.message}
         {...register("confirmPassword")}
       />
+
+      <p className="text-sm text-muted-foreground">
+        Já possui um login?{" "}
+        <a href="/login" className="text-primary hover:underline">
+          Entre
+        </a>
+      </p>
 
       {error && <span className="text-sm text-red-500">{error}</span>}
 
@@ -100,13 +101,6 @@ export function RegisterForm() {
       >
         {isSubmitting ? "Cadastrando..." : "Cadastrar-se"}
       </Button>
-
-      <p className="text-sm text-center text-muted-foreground">
-        Já possui um login?{" "}
-        <a href="/login" className="text-primary hover:underline">
-          Entre
-        </a>
-      </p>
     </form>
   );
 }

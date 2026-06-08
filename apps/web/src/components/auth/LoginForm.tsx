@@ -56,6 +56,13 @@ export function LoginForm() {
         {...register("password")}
       />
 
+      <p className="text-sm text-muted-foreground">
+        Não possui um login?{" "}
+        <a href="/register" className="text-primary hover:underline">
+          Cadastre-se
+        </a>
+      </p>
+
       {error && <span className="text-sm text-red-500">{error}</span>}
 
       <Button
@@ -66,13 +73,6 @@ export function LoginForm() {
       >
         {isSubmitting ? "Entrando..." : "Fazer Login"}
       </Button>
-
-      <p className="text-sm text-center text-muted-foreground">
-        Não possui um login?{" "}
-        <a href="/register" className="text-primary hover:underline">
-          Cadastre-se
-        </a>
-      </p>
     </form>
   );
 }
