@@ -1,10 +1,10 @@
 "use client";
 
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { Header } from "@/components/layout/Header";
 import { Accordion, AccordionItem } from "@/components/ui/Accordion";
+import { Logo } from "@/components/ui/Logo";
 import { useAuth } from "@/contexts/AuthContext";
 import { useFaq } from "@/hooks/useFaq";
 
@@ -22,27 +22,28 @@ export default function FAQPage() {
   if (authLoading) return null;
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="mx-auto max-w-3xl px-6 py-12">
-        <Link
-          href="/workspace"
-          className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
-        >
-          <ArrowLeft size={16} />
-          Voltar
-        </Link>
+    <div className="flex min-h-screen flex-col bg-background">
+      <Header
+        leading={<Logo />}
+        items={[
+          { label: "Inscribing", href: "/workspace" },
+          { label: "Perguntas Frequentes" },
+        ]}
+      />
 
-        <h1 className="text-3xl font-bold text-foreground mb-2">
+      <main className="mx-auto w-full max-w-3xl px-6 py-12">
+        <h1 className="mb-10 text-4xl font-bold text-foreground">
           Perguntas Frequentes
         </h1>
-        <p className="text-muted-foreground mb-8">
-          Tire suas dúvidas sobre o Inscribing.
-        </p>
 
         {faqItems.length > 0 ? (
           <Accordion>
-            {faqItems.map((item) => (
-              <AccordionItem key={item.id} title={item.question}>
+            {faqItems.map((item, index) => (
+              <AccordionItem
+                key={item.id}
+                title={`${index + 1}. ${item.question}`}
+                defaultOpen={index === 0}
+              >
                 {item.answer}
               </AccordionItem>
             ))}
@@ -52,7 +53,7 @@ export default function FAQPage() {
             Nenhuma pergunta disponível no momento.
           </p>
         )}
-      </div>
+      </main>
     </div>
   );
 }

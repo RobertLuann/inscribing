@@ -22,19 +22,26 @@ export function AccordionItem({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="flex w-full items-center justify-between py-4 text-left text-foreground hover:text-primary transition-colors"
+        className="flex w-full items-center justify-between gap-4 py-4 text-left transition-colors"
       >
-        <span className="font-medium">{title}</span>
+        <span
+          className={cn(
+            "text-base transition-colors",
+            isOpen ? "text-foreground" : "text-muted-foreground",
+          )}
+        >
+          {title}
+        </span>
         <ChevronDown
           size={18}
           className={cn(
-            "text-muted-foreground transition-transform",
+            "shrink-0 text-muted-foreground transition-transform",
             isOpen && "rotate-180",
           )}
         />
       </button>
       {isOpen && (
-        <div className="pb-4 text-muted-foreground text-sm leading-relaxed">
+        <div className="pb-4 text-sm leading-relaxed text-foreground">
           {children}
         </div>
       )}
