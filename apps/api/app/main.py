@@ -5,11 +5,15 @@ from fastapi.requests import Request
 from fastapi.responses import JSONResponse
 
 from app.db.database import init_db
+from app.logging_config import setup_logging
 from app.routes import auth_routes as auth
 from app.routes import block_routes as block
 from app.routes import chat_routes as chat
 from app.routes import collection_routes as collection
 from app.services.nlp_service import nlp_service
+
+# Configura o logging educativo do chatbot logo na importação da aplicação.
+setup_logging()
 
 app = FastAPI(
     title="Inscribing API",
