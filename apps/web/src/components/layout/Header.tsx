@@ -21,7 +21,7 @@ export function Header({ items, leading }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="grid h-14 grid-cols-[1fr_auto_1fr] items-center border-b border-border bg-background px-6">
+    <header className="grid h-14 grid-cols-[1fr_auto_1fr] items-center bg-background px-6">
       <div className="flex justify-start">{leading}</div>
 
       <div className="flex justify-center">
