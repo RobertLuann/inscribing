@@ -8,6 +8,7 @@ from app.schemas.auth_schema import (
     AuthResponse,
     LoginRequest,
     RegisterRequest,
+    UpdateProfileRequest,
     UserResponse,
 )
 from app.services.auth_service import auth_service
@@ -82,4 +83,26 @@ def me(user: User = Depends(get_current_user)):
         nome=user.nome,
         avatar_url=user.avatar_url,
         created_at=user.created_at,
+    )
+
+
+@router.put("/me", response_model=UserResponse)
+def update_me(
+    request: UpdateProfileRequest,
+    user: User = Depends(get_current_user),
+    session: Session = Depends(get_session),
+):
+    service = UserService(session)
+
+    try:
+        updated = service.update_profile(user_id=user.id, nome=request.nome)  # type: ignore
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
+    return UserResponse(
+        id=updated.id,  # type: ignore
+        email=updated.email,
+        nome=updated.nome,
+        avatar_url=updated.avatar_url,
+        created_at=updated.created_at,
     )

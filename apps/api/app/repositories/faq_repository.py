@@ -1,6 +1,10 @@
+import logging
+
 from sqlmodel import Session, select
 
 from app.models.faq import FAQItem
+
+logger = logging.getLogger("inscribing.db")
 
 
 class FAQRepository:
@@ -22,12 +26,27 @@ class FAQRepository:
         return list(self.session.exec(statement).all())
 
     def find_closest_match(self, query_vector: list[float]) -> FAQItem | None:
+        logger.info(
+            "    [pgvector] SELECT ... ORDER BY embedding <-> :query_vector LIMIT 1"
+        )
+        logger.info(
+            "    [faiss] Ordenando por distância L2 e retornando o vizinho mais próximo."
+        )
         statement = (
             select(FAQItem)
             .order_by(FAQItem.embedding.l2_distance(query_vector))  # type: ignore
             .limit(1)
         )
-        return self.session.exec(statement).first()
+        result = self.session.exec(statement).first()
+        if result is None:
+            logger.info("    [pgvector] Nenhum item encontrado (base vazia).")
+        else:
+            logger.info(
+                "    [faiss] Vizinho mais próximo: id=%s | pergunta=%r",
+                result.id,
+                result.question,
+            )
+        return result
 
     def update(self, faq: FAQItem) -> FAQItem:
         self.session.add(faq)
