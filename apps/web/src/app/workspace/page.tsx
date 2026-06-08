@@ -108,11 +108,21 @@ export default function WorkspacePage() {
       />
 
       <div className="flex flex-1 flex-col">
-        <Header collectionName={selectedCollection?.titulo} />
+        <Header
+          items={[
+            { label: "Inscribing", href: "/workspace" },
+            ...(selectedCollection
+              ? [{ label: selectedCollection.titulo }]
+              : []),
+          ]}
+        />
 
         <main className="flex-1 overflow-y-auto">
           {selectedCollection ? (
-            <BlockEditor collectionId={selectedCollection.id} />
+            <BlockEditor
+              collectionId={selectedCollection.id}
+              title={selectedCollection.titulo}
+            />
           ) : (
             <div className="flex h-full flex-col items-center justify-center gap-4 text-center px-6">
               <FileText size={48} className="text-border" />

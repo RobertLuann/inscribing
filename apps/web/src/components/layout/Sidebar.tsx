@@ -1,17 +1,17 @@
 "use client";
 
 import {
+  BookText,
   Copy,
   HelpCircle,
   MoreHorizontal,
   PanelLeft,
-  PanelLeftClose,
   Pencil,
   Plus,
   Trash2,
 } from "lucide-react";
 import { useState } from "react";
-import { Button } from "@/components/ui/Button";
+import { BrandMark } from "@/components/ui/Logo";
 import { cn } from "@/lib/utils";
 import type { Collection } from "@/types/collection";
 
@@ -44,43 +44,53 @@ export function Sidebar({
         expanded ? "w-64" : "w-16",
       )}
     >
-      {/* Toggle button + Create */}
-      <div className="flex items-center gap-1 p-3 border-b border-border">
+      {/* Cabeçalho: logo + botão de recolher */}
+      <div
+        className={cn(
+          "flex h-14 items-center px-3",
+          expanded ? "justify-between" : "justify-center",
+        )}
+      >
+        {expanded && (
+          <span className="inline-flex items-center gap-2">
+            <BrandMark className="h-6 w-6 text-foreground" />
+            <span className="text-lg font-semibold tracking-tight text-foreground">
+              Inscribing
+            </span>
+          </span>
+        )}
         <button
           type="button"
           onClick={() => setExpanded(!expanded)}
-          className="flex items-center justify-center w-9 h-9 rounded-md text-muted-foreground hover:text-foreground hover:bg-card transition-colors"
+          aria-label={expanded ? "Recolher menu" : "Expandir menu"}
+          className="flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-card hover:text-foreground"
         >
-          {expanded ? <PanelLeftClose size={18} /> : <PanelLeft size={18} />}
+          <PanelLeft size={18} />
         </button>
-        {expanded && (
-          <Button
-            variant="secondary"
-            size="sm"
-            className="flex-1 justify-start gap-2"
-            onClick={onCreate}
-          >
-            <Plus size={16} />
-            Nova Coleção
-          </Button>
-        )}
       </div>
 
-      {/* Collection list */}
-      <nav className="flex-1 overflow-y-auto py-2">
+      {/* Rótulo da seção */}
+      <div className="px-4 pb-1 pt-3">
+        <span className="text-xs font-medium text-muted-foreground">
+          {expanded ? "Coleções" : "Col..."}
+        </span>
+      </div>
+
+      {/* Lista de coleções */}
+      <nav className="flex-1 overflow-y-auto px-2">
         {collections.map((collection) => (
-          <div key={collection.id} className="relative">
+          <div key={collection.id} className="group relative">
             <button
               type="button"
               onClick={() => onSelect(collection.id)}
+              title={collection.titulo}
               className={cn(
-                "flex w-full items-center gap-3 px-3 py-2 text-sm text-left transition-colors hover:bg-card",
+                "flex w-full items-center gap-2 rounded-md px-2 py-2 text-sm transition-colors hover:bg-card",
+                expanded ? "text-left" : "justify-center",
                 selectedId === collection.id && "bg-card font-medium",
               )}
             >
-              <div className="flex h-6 w-6 items-center justify-center rounded bg-border/50 text-xs font-medium text-muted-foreground shrink-0">
-                {collection.titulo.charAt(0).toUpperCase()}
-              </div>
+              <BookText size={18} className="shrink-0 text-foreground" />
               {expanded && (
                 <span className="flex-1 truncate text-foreground">
                   {collection.titulo}
@@ -97,9 +107,10 @@ export function Sidebar({
                     menuOpenId === collection.id ? null : collection.id,
                   );
                 }}
-                className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center justify-center w-6 h-6 rounded text-muted-foreground hover:text-foreground hover:bg-border/50 transition-colors"
+                aria-label="Opções da coleção"
+                className="absolute right-1 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded text-muted-foreground opacity-0 transition-opacity hover:bg-border/40 hover:text-foreground group-hover:opacity-100"
               >
-                <MoreHorizontal size={14} />
+                <MoreHorizontal size={16} />
               </button>
             )}
 
@@ -110,14 +121,14 @@ export function Sidebar({
                   className="fixed inset-0 z-10 cursor-default"
                   onClick={() => setMenuOpenId(null)}
                 />
-                <div className="absolute right-0 top-full mt-1 z-20 w-40 rounded-md border border-border bg-background shadow-lg">
+                <div className="absolute right-1 top-full z-20 mt-1 w-40 rounded-md border border-border bg-background py-1 shadow-lg">
                   <button
                     type="button"
                     onClick={() => {
                       setMenuOpenId(null);
                       onRename(collection.id);
                     }}
-                    className="flex w-full items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-card transition-colors"
+                    className="flex w-full items-center gap-2 px-3 py-2 text-sm text-foreground transition-colors hover:bg-card"
                   >
                     <Pencil size={14} />
                     Renomear
@@ -128,7 +139,7 @@ export function Sidebar({
                       setMenuOpenId(null);
                       onDuplicate(collection.id);
                     }}
-                    className="flex w-full items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-card transition-colors"
+                    className="flex w-full items-center gap-2 px-3 py-2 text-sm text-foreground transition-colors hover:bg-card"
                   >
                     <Copy size={14} />
                     Duplicar
@@ -139,7 +150,7 @@ export function Sidebar({
                       setMenuOpenId(null);
                       onDelete(collection.id);
                     }}
-                    className="flex w-full items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-card transition-colors"
+                    className="flex w-full items-center gap-2 px-3 py-2 text-sm text-red-600 transition-colors hover:bg-card"
                   >
                     <Trash2 size={14} />
                     Excluir
@@ -149,18 +160,31 @@ export function Sidebar({
             )}
           </div>
         ))}
-      </nav>
 
-      {/* Help link */}
-      <div className="border-t border-border p-3">
-        <a
-          href="/faq"
+        {/* Nova coleção */}
+        <button
+          type="button"
+          onClick={onCreate}
           className={cn(
-            "flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors",
+            "flex w-full items-center gap-2 rounded-md px-2 py-2 text-sm text-muted-foreground transition-colors hover:bg-card hover:text-foreground",
             !expanded && "justify-center",
           )}
         >
-          <HelpCircle size={18} />
+          <Plus size={18} className="shrink-0" />
+          {expanded && <span>Nova Coleção</span>}
+        </button>
+      </nav>
+
+      {/* Ajuda e FAQ */}
+      <div className="p-3">
+        <a
+          href="/faq"
+          className={cn(
+            "flex items-center gap-2 rounded-md px-2 py-2 text-sm text-muted-foreground transition-colors hover:bg-card hover:text-foreground",
+            !expanded && "justify-center",
+          )}
+        >
+          <HelpCircle size={18} className="shrink-0" />
           {expanded && <span>Ajuda e FAQ</span>}
         </a>
       </div>

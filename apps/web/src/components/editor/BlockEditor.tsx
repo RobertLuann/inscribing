@@ -15,6 +15,7 @@ import type { Block, BlockType, ReorderItem } from "@/types/block";
 
 interface BlockEditorProps {
   collectionId: number;
+  title: string;
 }
 
 // Estrutura mínima de leitura de um bloco do BlockNote (tipagem estrutural,
@@ -93,7 +94,7 @@ function blockNoteToTipo(block: ReadableBlock): {
   }
 }
 
-export function BlockEditor({ collectionId }: BlockEditorProps) {
+export function BlockEditor({ collectionId, title }: BlockEditorProps) {
   const { data: blocks } = useBlocks(collectionId);
   const createBlock = useCreateBlock();
   const updateBlock = useUpdateBlock();
@@ -221,7 +222,10 @@ export function BlockEditor({ collectionId }: BlockEditorProps) {
   }
 
   return (
-    <div className="mx-auto max-w-3xl px-6 py-8">
+    <div className="mx-auto max-w-3xl px-6 py-10">
+      <h1 className="mb-6 px-[54px] text-4xl font-bold text-foreground">
+        {title}
+      </h1>
       <BlockNoteView editor={editor} onChange={scheduleSave} />
     </div>
   );

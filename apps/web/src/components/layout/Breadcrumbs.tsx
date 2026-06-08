@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronRight } from "lucide-react";
+import { Home } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface BreadcrumbItem {
@@ -15,21 +15,25 @@ interface BreadcrumbsProps {
 
 export function Breadcrumbs({ items, className }: BreadcrumbsProps) {
   return (
-    <nav className={cn("flex items-center gap-1 text-sm", className)}>
+    <nav
+      className={cn(
+        "flex items-center gap-2 text-sm text-muted-foreground",
+        className,
+      )}
+    >
+      <Home size={16} className="shrink-0" />
       {items.map((item, index) => (
-        <span key={item.label} className="flex items-center gap-1">
-          {index > 0 && (
-            <ChevronRight size={14} className="text-muted-foreground" />
-          )}
+        <span key={item.label} className="flex items-center gap-2">
+          {index > 0 && <span className="text-border">/</span>}
           {item.href ? (
             <a
               href={item.href}
-              className="text-muted-foreground hover:text-foreground transition-colors"
+              className="transition-colors hover:text-foreground"
             >
               {item.label}
             </a>
           ) : (
-            <span className="text-foreground font-medium">{item.label}</span>
+            <span className="text-foreground">{item.label}</span>
           )}
         </span>
       ))}
