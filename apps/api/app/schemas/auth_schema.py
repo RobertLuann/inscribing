@@ -15,6 +15,10 @@ class LoginRequest(BaseModel):
     password: str
 
 
+class UpdateProfileRequest(BaseModel):
+    nome: str
+
+
 class UserResponse(BaseModel):
     id: int
     email: str

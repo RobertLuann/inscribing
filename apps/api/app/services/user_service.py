@@ -14,6 +14,10 @@ class UserService:
         self, email: str, nome: str, password: str, confirm_password: str
     ) -> User:
         email = email.lower().strip()
+        nome = nome.strip()
+
+        if not nome:
+            raise ValueError("O nome é obrigatório.")
 
         existing = self.user_repo.find_by_email(email)
         if existing:
@@ -28,10 +32,23 @@ class UserService:
 
         user = User(
             email=email,
-            nome=nome.strip(),
+            nome=nome,
             senha_hash=auth_service.hash_password(password),
         )
         return self.user_repo.create(user)
+
+    def update_profile(self, user_id: int, nome: str) -> User:
+        nome = nome.strip()
+
+        if not nome:
+            raise ValueError("O nome é obrigatório.")
+
+        user = self.user_repo.find_by_id(user_id)
+        if not user:
+            raise ValueError("Usuário não encontrado.")
+
+        user.nome = nome
+        return self.user_repo.update(user)
 
     def get_by_id(self, user_id: int) -> User | None:
         return self.user_repo.find_by_id(user_id)
